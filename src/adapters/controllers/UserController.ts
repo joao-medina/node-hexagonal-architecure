@@ -30,12 +30,11 @@ export class UserController {
       const user = new User(id, name, email, password, address);
       const result = await new SaveUser().execute(user, this.repository);
       if (result.error) {
-        res.status(500).json({ error: true, data: String(result.data) });
-        return;
+        throw result.error;
       }
       res.status(201).json({ data: result.data });
     } catch (error) {
-      res.status(500).json({ error: true, data: String(error) });
+      res.status(500).json({ error: true, data: error });
     }
   }
 
@@ -43,12 +42,11 @@ export class UserController {
     try {
       const result = await new ListUsers().execute(this.repository);
       if (result.error) {
-        res.status(500).json({ error: true, data: String(result.data) });
-        return;
+        throw result.error;
       }
       res.status(200).json({ data: result.data });
     } catch (error) {
-      res.status(500).json({ error: true, data: String(error) });
+      res.status(500).json({ error: true, data: error });
     }
   }
 
@@ -58,13 +56,11 @@ export class UserController {
     try {
       const result = await new GetUserById().execute(id, this.repository);
       if (result.error) {
-        const isNotFound = String(result.data).includes("not found");
-        res.status(isNotFound ? 404 : 500).json({ error: true, data: String(result.data) });
-        return;
+        throw result.error;
       }
       res.status(200).json({ data: result.data });
     } catch (error) {
-      res.status(500).json({ error: true, data: String(error) });
+      res.status(500).json({ error: true, data: error });
     }
   }
 
@@ -81,13 +77,11 @@ export class UserController {
       const user = new User(id, name, email, password, address);
       const result = await new UpdateUser().execute(id, user, this.repository);
       if (result.error) {
-        const isNotFound = String(result.data).includes("not found");
-        res.status(isNotFound ? 404 : 500).json({ error: true, data: String(result.data) });
-        return;
+        throw result.error;
       }
       res.status(200).json({ data: result.data });
     } catch (error) {
-      res.status(500).json({ error: true, data: String(error) });
+      res.status(500).json({ error: true, data: error });
     }
   }
 
@@ -97,13 +91,11 @@ export class UserController {
     try {
       const result = await new DeleteUser().execute(id, this.repository);
       if (result.error) {
-        const isNotFound = String(result.data).includes("not found");
-        res.status(isNotFound ? 404 : 500).json({ error: true, data: String(result.data) });
-        return;
+        throw result.error;
       }
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ error: true, data: String(error) });
+      res.status(500).json({ error: true, data: error });
     }
   }
 }
